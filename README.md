@@ -1,6 +1,6 @@
 # Example Tauri v2 app using Python sidecar
 
-A native app built with Tauri version 2 that spawns a Python sub-process (sidecar) which is a FastAPI server.
+A native app built with Tauri version 2 that spawns a Python sub-process (sidecar) which starts a FastAPI server.
 
 ![logo](extras/sidecar-logo.png "python sidecar logo")
 
