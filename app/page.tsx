@@ -143,7 +143,7 @@ export default function Home() {
 
 
   // Start python api server. @TODO Update this for v2
-  // This does the same thing as in the main.rs file but in js.
+  // This does the same shutdown procedure as in main.rs.
   // useEffect(() => {
   //   const start = async () => {
   //     // const { Command } = window.__TAURI__.shell;

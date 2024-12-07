@@ -6,7 +6,7 @@ A native app built with Tauri version 2 that spawns a Python sub-process (sideca
 
 ## Introduction
 
-The example app uses Next.js as the frontend and Python (FastAPI) as the backend. Tauri is a Rust framework that orchestrates the frontend and backend(s) into a native app experience.
+This example app uses Next.js as the frontend and Python (FastAPI) as the backend. Tauri is a Rust framework that orchestrates the frontend and backend(s) into a native app experience.
 
 This template project is intended to demonstrate the use of single file Python executables with Tauri v2.
 
@@ -32,9 +32,9 @@ The use of "sidecars" is to allow developers to package dependencies to make ins
 
 This should give you everything you need to build a local, native application that can use other programs to perform specialized work (like a server, llm engine or database).
 
-- Launch and communicate with any binary or runtime written in any language. This example uses a single Python executable.
+- Launch and communicate with any binary or runtime written in any language. This example uses a Python executable.
 
-- Communicate between frontend (javascript) and a spawned server via http.
+- Communicate between frontend (javascript) and backend (Python) server via http.
 
 - IPC communication between frontend (javascript) and Tauri (Rust) framework.
 
