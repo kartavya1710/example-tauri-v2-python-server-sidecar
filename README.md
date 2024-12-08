@@ -2,6 +2,8 @@
 
 A native app built with Tauri version 2 that spawns a Python sub-process (sidecar) which starts a FastAPI server.
 
+[Download the example app and try out](https://github.com/dieharders/example-tauri-v2-python-server-sidecar/releases)
+
 ![Python](https://img.shields.io/badge/-Python-000?&logo=Python)
 ![JavaScript](https://img.shields.io/badge/-JavaScript-000?&logo=JavaScript)
 ![TypeScript](https://img.shields.io/badge/-TypeScript-000?&logo=TypeScript)
