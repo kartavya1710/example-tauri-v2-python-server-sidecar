@@ -5,7 +5,6 @@ A native app built with Tauri version 2 that spawns a Python sub-process (sideca
 [Download the example app and try out](https://github.com/dieharders/example-tauri-v2-python-server-sidecar/releases)
 
 ![Python](https://img.shields.io/badge/-Python-000?&logo=Python)
-![JavaScript](https://img.shields.io/badge/-JavaScript-000?&logo=JavaScript)
 ![TypeScript](https://img.shields.io/badge/-TypeScript-000?&logo=TypeScript)
 ![Rust](https://img.shields.io/badge/-Rust-000?&logo=Rust)
 <br/>
@@ -15,8 +14,8 @@ A native app built with Tauri version 2 that spawns a Python sub-process (sideca
 
 > [!NOTE]
 >
-> <h3>Tauri v1 example is also available:
-> <a href="https://github.com/dieharders/example-tauri-python-server-sidecar" style="color: #228be6">example-tauri-python-server-sidecar</a></h3>
+> <strong>Tauri v1 example also available:
+> <a href="https://github.com/dieharders/example-tauri-python-server-sidecar" style="color: #228be6">example-tauri-python-server-sidecar</a></strong>
 
 ![logo](extras/sidecar-logo.png "python sidecar logo")
 
@@ -28,17 +27,17 @@ This template project is intended to demonstrate the use of single file Python e
 
 ![app screenshot](extras/screenshot.png "app screenshot")
 
-The use of "sidecars" is to allow developers to package dependencies to make installation easier on the user. Tauri allows the frontend to communicate with any runtime and gives access to the OS's disk, camera, and other native hardware features. This is defined in the `tauri.conf.json` file. See [here](https://v2.tauri.app/develop/sidecar/) for more info.
+Tauri "sidecars" allow developers to package dependencies to make installation easier on the user. Tauri's API allows the frontend to communicate with any runtime and give it access to the OS disk, camera, and other native hardware features. This is defined in the `tauri.conf.json` file. See [here](https://v2.tauri.app/develop/sidecar/) for more info.
 
 ## How It Works
 
 ![python sidecar architecture](extras/diagram.png "python sidecar architecture")
 
-- Tauri takes your frontend UI written in html/javascript and displays it in a native webview. This makes the resulting file size smaller since it does not need to include a web browser.
+- Tauri takes your frontend UI written in html/javascript and displays it in a native webview. This makes the resulting file size smaller since it does not need to include a web browser (as Electron.js requires).
 
 - [PyInstaller](https://pyinstaller.org/en/stable/) is used to compile a binary of the Python code so users don't have to worry about installing dependencies.
 
-- In `main.rs` we spawn a python binary ("sidecar") called `main.exe` which starts an api server on `localhost:8008`. The frontend tells Tauri to startup and shutdown the sidecar via stdin/stdout commands (cannot use process.kill() for one-file Python executables since Tauri only knows the pid of the PyInstaller bootloader process and not its' child process which is actually the sidecar).
+- In `main.rs` we spawn a python binary (sidecar) called `main.exe` which starts an api server on `localhost:8008`. The frontend tells Tauri to startup and shutdown the sidecar via stdin/stdout commands. <em>Note, we cannot use process.kill() for one-file Python executables since Tauri only knows the pid of the PyInstaller bootloader process and not its' child process (which is actually the sidecar)</em>.
 
 - If you are not comfortable coding in Rust, do not worry, this example orchestrates things in a way so you only need concern yourself with communication between your frontend and server (sidecar) via http.
 
@@ -54,7 +53,7 @@ This should give you everything you need to build a local, native application th
 
 - IPC communication between frontend (javascript) and Tauri (Rust) framework.
 
-- Also control this app from an external UI source like another website. As long as it uses http(s) and you whitelist the url in the server config `main.py`.
+- Also control this app from an external UI source like another website, app or terminal. As long as it uses http(s) and you whitelist the url in the server config `main.py`.
 
 ## Project Structure
 
@@ -136,6 +135,8 @@ A note on compiling Python exe (the -F flag bundles everything into one .exe). Y
 Build the production app for a specific OS:
 
 ```bash
+# Uses `pnpm build:sidecar-winos` by default
+# Modify script for your target OS
 pnpm tauri build
 ```
 
@@ -151,7 +152,7 @@ And the raw executable here:
 
 - Pass parameters to the sidecar (like server port) via a frontend form.
 
-- Pass argument `--dev-sidecar` to `pnpm tauri dev` script that tells Tauri to run sidecars in "dev mode". This would allow for running the python code from the python interpreter installed on your machine rather than having to manually run `pnpm build:sidecar-[os]` each time you make changes to the Python code.
+- Pass argument `--dev-sidecar` to `pnpm tauri dev` script that tells Tauri to run sidecars in "dev mode". This would allow for running the python code from the python interpreter installed on your machine rather than having to manually compile with `pnpm build:sidecar-[os]` each time you make changes to the Python code.
 
 - Develop a standalone multi-sidecar manager that can handle startup/shutdown and communication between all other sidecars spawned in the app.
 
