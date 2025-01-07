@@ -148,6 +148,16 @@ And the raw executable here:
 
 - `<project-dir>\src-tauri\target\release`
 
+## Issue's ?
+
+- "Failed to fetch" error: In `src/backends/main.py` CORS expects your UI is running on localhost:3000. If not, add your url to the `origins = []` array or set:
+
+```python
+app.add_middleware(
+  allow_origins="*" # whitelist everything
+)
+```
+
 ## Todo's
 
 - Pass parameters to the sidecar (like server port) via a frontend form.
