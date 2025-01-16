@@ -53,7 +53,7 @@
         "resizable": true,
         "title": "tauri-python-sidecar",
         "width": 1200,
-        "useHttpsScheme": true
+        "useHttpsScheme": false
       }
     ],
     "security": {
