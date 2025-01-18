@@ -1,13 +1,15 @@
 import uuid
 from openai import OpenAI
 from utils.common import StreamEvent, StreamEventType
+import dotenv
 
 
 class OpenAIService:
     def __init__(self):
+
         self.client = OpenAI(
             base_url="https://openrouter.ai/api/v1",
-            api_key="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"
+            api_key="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"
         )
         self.user_id = uuid.uuid4().hex
 
@@ -55,7 +57,7 @@ class OpenAIService:
         openai_messages.extend(self.convert_to_openai_messages(messages))
 
         stream = self.client.chat.completions.create(
-            model="deepseek/deepseek-chat",
+            model="GPT-4o-mini",
             messages=openai_messages,
             stream=True,
             max_tokens=8192,

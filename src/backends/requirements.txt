@@ -1,7 +1,0 @@
-fastapi
-undetected-playwright-patch
-openai
-Pillow
-mcp
-uvicorn
-undetected_playwright

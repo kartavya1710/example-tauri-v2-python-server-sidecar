@@ -146,28 +146,53 @@ export default function Home() {
     }
   }, [])
 
+  type Message = {
+    id: string;
+    content: string;
+    sender: 'user' | 'ai';
+    timestamp: Date;
+  };
+  
+  // Add this with other state declarations
+  const [messages, setMessages] = useState<Message[]>([]);
+  
   const startTaskAction = async () => {
     try {
+      const newUserMessage: Message = {
+        id: Date.now().toString(),
+        content: message,
+        sender: 'user',
+        timestamp: new Date()
+      };
+      setMessages(prev => [...prev, newUserMessage]);
+  
       const result = await apiAction("start_task", "POST", { message });
-      if (result) {
-        setLogs(prev => prev += `\n[ui] Task started with message: ${message}`);
-        setMessage(""); // Clear input after sending
+      
+      if (result?.success) {
+        const newAiMessage: Message = {
+          id: (Date.now() + 1).toString(),
+          content: result.result,
+          sender: 'ai',
+          timestamp: new Date()
+        };
+        setMessages(prev => [...prev, newAiMessage]);
+        setMessage(""); // Clear input
       }
       return result;
     } catch (err) {
       console.error(`[ui] Failed to start task. ${err}`);
       setLogs(prev => prev += `\n[ui] Failed to start task: ${err}`);
     }
-  }
+  };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e:any) => {
     e.preventDefault();
     if (message.trim()) {
       startTaskAction();
     }
   };  
 
-  const handleKeyPress = (e) => {
+  const handleKeyPress = (e:any) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSubmit(e);
@@ -357,34 +382,35 @@ export default function Home() {
           <button className="bg-gray-700 text-white px-4 py-2 rounded">Stop</button>
         </div>
 
-        <div className="w-full max-w-4xl flex justify-center items-center h-full">
-          <div className="space-y-4">
-            <div className="bg-gray-800 rounded-lg p-6 text-gray-300">
-              <p className="mb-4">
-                I want to book a flight from Yatra.com for Dubai to Surat, Gujarat on 15th December, one-way trip for 1
-                person. Search for the flight and select the first flight and go for booking until needed card details.
-                Here are my details:
-              </p>
-
-              <ul className="mb-4 space-y-2">
-                <li>Name → Ms. Vidhi Bhanderi</li>
-                <li>Number → 6353355179</li>
-                <li>Email → <a href="#" className="text-blue-500">vidhi@gmail.com</a></li>
-                <li>Birthdate → 01/01/2002</li>
-              </ul>
-
-              <p className="mb-4">
-                Book a seat from the recommendations and no need to add any extra meals or extra insurance. Just go
-                straight till the booking and continue without travel insurance.
-              </p>
-
-              <p>Here are my UPI details for payment:</p>
-              <ul className="space-y-2">
-                <li>UPI ID → vidhibhanderi94@oksbi</li>
-              </ul>
-            </div>
+        <div className="flex-1 p-8 flex flex-col w-full">
+          <div className="flex-1 max-w-4xl mx-auto w-full overflow-y-auto">
+            {messages.map((msg) => (
+              <div
+                key={msg.id}
+                className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'} mb-4`}
+              >
+                <div
+                  className={`max-w-[80%] rounded-lg p-4 ${
+                    msg.sender === 'user' 
+                      ? 'bg-blue-600 text-white ml-4' 
+                      : 'bg-gray-800 text-gray-300 mr-4'
+                  }`}
+                >
+                  <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
+                  <span className="text-xs opacity-50 mt-1 block">
+                    {msg.timestamp.toLocaleTimeString()}
+                  </span>
+                </div>
+              </div>
+            ))}
+            {messages.length === 0 && (
+              <div className="text-center text-gray-500 mt-10">
+                Start a conversation by typing a message below
+              </div>
+            )}
           </div>
         </div>
+
 
         <div className="fixed bottom-0 left-72 right-0 bg-gray-900 border-t border-gray-700 p-4">
             <form onSubmit={handleSubmit} className="flex items-center bg-gray-800 rounded px-4 py-2">
