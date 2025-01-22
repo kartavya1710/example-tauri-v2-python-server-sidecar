@@ -1,6 +1,8 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+use std::fs;
+use std::path::PathBuf;
 use std::sync::{Arc, Mutex};
 use tauri::{Emitter, Manager, RunEvent};
 use tauri_plugin_shell::process::{CommandChild, CommandEvent};
@@ -105,11 +107,68 @@ fn start_sidecar(app_handle: tauri::AppHandle) -> Result<String, String> {
     Ok("Sidecar spawned and monitoring started.".to_string())
 }
 
+// Copy directory recursively - resources
+fn copy_dir_recursive(src: PathBuf, dst: PathBuf) -> Result<(), String> {
+    if src.is_dir() {
+        fs::create_dir_all(&dst)
+            .map_err(|e| format!("Failed to create directory {}: {}", dst.display(), e))?;
+
+        for entry in fs::read_dir(&src)
+            .map_err(|e| format!("Failed to read directory {}: {}", src.display(), e))?
+        {
+            let entry = entry.map_err(|e| e.to_string())?;
+            let src_path = entry.path();
+            let dst_path = dst.join(entry.file_name());
+
+            if src_path.is_dir() {
+                copy_dir_recursive(src_path, dst_path)?;
+            } else {
+                fs::copy(&src_path, &dst_path).map_err(|e| {
+                    format!(
+                        "Failed to copy file from {} to {}: {}",
+                        src_path.display(),
+                        dst_path.display(),
+                        e
+                    )
+                })?;
+            }
+        }
+    }
+
+    Ok(())
+}
+
 fn main() {
     tauri::Builder::default()
         // Add any necessary plugins
         .plugin(tauri_plugin_shell::init())
         .setup(|app| {
+            // Copy server files during setup
+            println!("[tauri] Copying server files...");
+            
+            // Get the executable directory instead of AppData
+            let exe_dir = app
+            .handle()
+            .path()
+            .app_config_dir()
+            .expect("failed to get app dir");
+
+            let resource_dir = app
+                .handle()
+                .path()
+                .resource_dir()
+                .expect("failed to resolve server resource")
+                .join("server");
+
+            let server_dir = exe_dir.join("server");
+
+            // Only copy if the server directory does not exist
+            if !server_dir.exists() {
+                copy_dir_recursive(resource_dir, server_dir)
+                    .expect("failed to copy server directory");
+                println!("[tauri] server files copied successfully")
+            }
+
             // Store the initial sidecar process in the app state
             app.manage(Arc::new(Mutex::new(None::<CommandChild>)));
             // Clone the app handle for use elsewhere

@@ -9,7 +9,7 @@ class OpenAIService:
 
         self.client = OpenAI(
             base_url="https://openrouter.ai/api/v1",
-            api_key="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"
+            api_key="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"
         )
         self.user_id = uuid.uuid4().hex
 

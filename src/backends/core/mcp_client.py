@@ -4,7 +4,6 @@ from typing import List, Dict, Any
 from contextlib import AsyncExitStack
 from dataclasses import dataclass
 import re
-import xml.etree.ElementTree as ET
 
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client, get_default_environment

@@ -2222,3 +2222,35 @@ Traceback (most recent call last):
 RuntimeError: Attempted to exit cancel scope in a different task than it was entered in
 2025-01-18 15:48:17,210 - httpcore.connection - DEBUG - close.started
 2025-01-18 15:48:17,212 - httpcore.connection - DEBUG - close.complete
+2025-01-21 18:37:14,008 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-01-21 18:37:27,895 - asyncio - ERROR - an error occurred during closing of asynchronous generator <async_generator object stdio_client at 0x0000020CD082FE00>
+asyncgen: <async_generator object stdio_client at 0x0000020CD082FE00>
+Traceback (most recent call last):
+  File "C:\Users\Vidhi\temp\example-tauri-v2-python-server-sidecar\venv\Lib\site-packages\mcp\client\stdio.py", line 153, in stdio_client
+    yield read_stream, write_stream
+GeneratorExit
+
+During handling of the above exception, another exception occurred:
+
+  + Exception Group Traceback (most recent call last):
+  |   File "C:\Users\Vidhi\temp\example-tauri-v2-python-server-sidecar\venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 767, in __aexit__
+  |     raise BaseExceptionGroup(
+  | BaseExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
+  +-+---------------- 1 ----------------
+    | Traceback (most recent call last):
+    |   File "C:\Users\Vidhi\temp\example-tauri-v2-python-server-sidecar\venv\Lib\site-packages\mcp\client\stdio.py", line 153, in stdio_client
+    |     yield read_stream, write_stream
+    | GeneratorExit
+    +------------------------------------
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Vidhi\temp\example-tauri-v2-python-server-sidecar\venv\Lib\site-packages\mcp\client\stdio.py", line 147, in stdio_client
+    async with (
+  File "C:\Users\Vidhi\temp\example-tauri-v2-python-server-sidecar\venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 773, in __aexit__
+    if self.cancel_scope.__exit__(type(exc), exc, exc.__traceback__):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Vidhi\temp\example-tauri-v2-python-server-sidecar\venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 456, in __exit__
+    raise RuntimeError(
+RuntimeError: Attempted to exit cancel scope in a different task than it was entered in

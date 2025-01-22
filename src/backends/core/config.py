@@ -32,17 +32,10 @@ mcp_config = {
     # #     "args": ["src/server/cron-server.py"],
     # #     "env": None
     # # },
-    "tavily-search": {
-            "command": "C:/Users/Vidhi/example-tauri-v2-python-server-sidecar/venv/Scripts/python.exe",
-            "args": [
-                "C:/Users/Vidhi/example-tauri-v2-python-server-sidecar/src/backends/server/mcp-server-tavily/src/server.py"
-            ],
-            "env": None,
-    },
     "binance-server": {
-            "command": "C:/Users/Vidhi/example-tauri-v2-python-server-sidecar/venv/Scripts/python.exe",
+            "command": "python",
             "args": [
-                "C:/Users/Vidhi/example-tauri-v2-python-server-sidecar/src/backends/server/binance-server.py"
+                "server/binance-server.py"
             ],
             "env": None,
     },
